@@ -27,10 +27,12 @@
 #include <iostream>
 #include <stdio.h>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
 KSEQ_INIT(gzFile, gzread) 
+
 
 void usage();
 
@@ -44,6 +46,7 @@ int main (int argc, char  **argv){
 	int* records;
     int* shuffled;
     int total_needed = 0;
+    string prefix = "";
     
     
     char *file_s[2] = {0,0}; //empty array to hold file name(s)
@@ -53,7 +56,7 @@ int main (int argc, char  **argv){
 
     
     char c;
-    while (	(c = getopt (argc, argv, "-t:w:")) != -1) {
+    while (	(c = getopt (argc, argv, "-t:w:o:")) != -1) {
 		switch(c){
 			case '\1' : // text 
 				file_s[file_n] = optarg;
@@ -68,6 +71,9 @@ int main (int argc, char  **argv){
 			case 'h':
 				usage();
 				return -1;
+			case 'o':
+				prefix = optarg;
+				break;
 			}
 		
 		}
@@ -127,11 +133,9 @@ int main (int argc, char  **argv){
 	for( int n =0; n <file_n ;++n){
 		
 		// append our output file name //
-		char suff[] = ".rand";
-		file_o[n] = new char[strlen(file_s[n])+strlen(suff)+1];
-		strcpy (file_o[n] ,file_s[n]);
-		strcat(file_o[n],suff);
-		
+		string base = file_s[n];
+		base = prefix+base+".rand";
+		file_o[n] = strdup(base.c_str());		
 		// open output file stream //
 		ofstream file_out;
 		file_out.open(file_o[n]);
@@ -168,14 +172,14 @@ int main (int argc, char  **argv){
 }
 
 void usage(){
-	cerr << endl <<"\tThis program randomly sub samples a fastq file" << endl << endl;
-	cerr << "\tUsage ./RandomSubFq <file1> .. <filen> -t -w" <<endl;
-	cerr << "\tFiles need to be in the fastq file and can be gzip compressed" << endl;
-	cerr << "\t\t-t can be set with the total number of fastq records in the file (prefered as it keeps from looping over the file twice)." << endl;
-	cerr << "\t\t-w needs to be set to the total number of records you want from the file (must be less than total records)." << endl<<endl;
-	
-	cerr << "\tIf you pass more than one file to this program at a time it will pull the same records from each file. This is intended behavior for paired end reads." << endl;
-	cerr << "\tThis program assumes all files provided are of the same size and that paired end reads are in the same order." <<endl << endl;
+	cerr << endl <<"This program randomly sub samples a fastq file" << endl << endl;
+	cerr << "Usage ./RandomSubFq <file1> .. <filen> -t -w" <<endl;
+	cerr << "Files need to be in the fastq file and can be gzip compressed" << endl;
+	cerr << "\t-t can be set with the total number of fastq records in the file (prefered as it keeps from looping over the file twice)." << endl;
+	cerr << "\t-w needs to be set to the total number of records you want from the file (must be less than total records)." << endl<<endl;
+	cerr << "\t-o outpur with a specific prefix"<<endl;
+	cerr << "If you pass more than one file to this program at a time it will pull the same records from each file. This is intended behavior for paired end reads." << endl;
+	cerr << "This program assumes all files provided are of the same size and that paired end reads are in the same order." <<endl << endl;
 	
 	}
 
