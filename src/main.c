@@ -47,6 +47,7 @@ int main (int argc, char  **argv){
     int* shuffled;
     int total_needed = 0;
     string prefix = "";
+    int seed = time(NULL);
     
     
     char *file_s[2] = {0,0}; //empty array to hold file name(s)
@@ -56,6 +57,7 @@ int main (int argc, char  **argv){
 
     
     char c;
+
     while (	(c = getopt (argc, argv, "-t:w:o:")) != -1) {
 		switch(c){
 			case '\1' : // text 
@@ -73,6 +75,9 @@ int main (int argc, char  **argv){
 				return -1;
 			case 'o':
 				prefix = optarg;
+				break;
+			case 's':
+				seed = atoi(optarg);
 				break;
 			}
 		
@@ -118,7 +123,9 @@ int main (int argc, char  **argv){
   	for (l=0;l<total_records ; ++l){
 		records[l] = l;
 		}
-  	srand (time(NULL));
+
+
+  	srand (seed);
   	// Yates shuffle (random enough for us) //
 	  	for (l = total_records-1; l > 0 ; l--){
 			int random = rand() % l; // get a random number between 0 and current max
@@ -173,11 +180,12 @@ int main (int argc, char  **argv){
 
 void usage(){
 	cerr << endl <<"This program randomly sub samples a fastq file" << endl << endl;
-	cerr << "Usage ./RandomSubFq <file1> .. <filen> -t -w" <<endl;
+	cerr << "Usage ./RandomSubFq [options] <file1> .. <filen>" <<endl;
 	cerr << "Files need to be in the fastq file and can be gzip compressed" << endl;
 	cerr << "\t-t can be set with the total number of fastq records in the file (prefered as it keeps from looping over the file twice)." << endl;
 	cerr << "\t-w needs to be set to the total number of records you want from the file (must be less than total records)." << endl<<endl;
-	cerr << "\t-o outpur with a specific prefix"<<endl;
+	cerr << "\t-o output with a specific prefix"<<endl;
+	cerr << "\t-s sets the seed for RNG";
 	cerr << "If you pass more than one file to this program at a time it will pull the same records from each file. This is intended behavior for paired end reads." << endl;
 	cerr << "This program assumes all files provided are of the same size and that paired end reads are in the same order." <<endl << endl;
 	
