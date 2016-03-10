@@ -58,7 +58,7 @@ int main (int argc, char  **argv){
     
     char c;
 
-    while (	(c = getopt (argc, argv, "-t:w:o:")) != -1) {
+    while (	(c = getopt (argc, argv, "-t:w:o:s:")) != -1) {
 		switch(c){
 			case '\1' : // text 
 				file_s[file_n] = optarg;
