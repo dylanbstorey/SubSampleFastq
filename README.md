@@ -1,3 +1,4 @@
+[![DOI](https://zenodo.org/badge/19239/dylanstorey/SubSampleFastq.svg)](https://zenodo.org/badge/latestdoi/19239/dylanstorey/SubSampleFastq)
 #README
 A simple and straight forward program that randomly sub samples a fastq
 file. Written in C++. 
