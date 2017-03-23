@@ -1,5 +1,6 @@
 [![DOI](https://zenodo.org/badge/23120249.svg)](https://zenodo.org/badge/latestdoi/23120249)
-#README
+
+# README
 A simple and straight forward program that randomly sub samples a fastq
 file. Written in C++. 
 
